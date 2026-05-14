@@ -1,0 +1,47 @@
+---
+title: "Nexus Stats — Mapa interactivo con Leaflet"
+author: "Dany"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+# Puntos de interés en la Ciudad de México
+
+```{r}
+library(leaflet)
+
+puntos <- data.frame(
+  lat = c(19.4326, 19.4361, 19.3270, 19.4969),
+  lng = c(-99.1332, -99.1438, -99.1860, -99.1276),
+  nombre = c(
+    "Zócalo de la CDMX",
+    "Palacio de Bellas Artes",
+    "UNAM (Ciudad Universitaria)",
+    "Basílica de Guadalupe"
+  ),
+  url = c(
+    "<a href='https://es.wikipedia.org/wiki/Plaza_de_la_Constituci%C3%B3n_(Ciudad_de_M%C3%A9xico)'>Más info</a>",
+    "<a href='https://es.wikipedia.org/wiki/Palacio_de_Bellas_Artes'>Más info</a>",
+    "<a href='https://www.unam.mx/'>Sitio oficial</a>",
+    "<a href='https://es.wikipedia.org/wiki/Bas%C3%ADlica_de_Guadalupe'>Más info</a>"
+  )
+)
+
+puntos %>%
+  leaflet() %>%
+  addTiles() %>%
+  addMarkers(
+    lat = ~lat, lng = ~lng,
+    popup = ~paste0("<b>", nombre, "</b><br>", url),
+    clusterOptions = markerClusterOptions()
+  ) %>%
+  setView(lng = -99.1332, lat = 19.4326, zoom = 11)
+```
+
+---
+
+Página creada como entrega del curso *Developing Data Products* (Johns Hopkins / Coursera).
